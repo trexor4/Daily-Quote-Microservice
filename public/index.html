@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daily Quote</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #quote { font-size: 1.5em; margin-bottom: 10px; }
+    #author { font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Daily Quote Generator</h1>
+  <select id="category">
+    <option value="general">General</option>
+    <option value="motivation">Motivation</option>
+  </select>
+  <button id="getQuote">Get Quote</button>
+  <div id="quoteBox">
+    <p id="quote"></p>
+    <p id="author"></p>
+  </div>
+
+  <script>
+    document.getElementById('getQuote').addEventListener('click', async () => {
+      const category = document.getElementById('category').value;
+      try {
+        const res = await fetch(`/quote?category=${category}`);
+        if (!res.ok) throw new Error('Failed to fetch quote');
+        const data = await res.json();
+        document.getElementById('quote').innerText = `"${data.quote}"`;
+        document.getElementById('author').innerText = `- ${data.author}`;
+      } catch (err) {
+        document.getElementById('quote').innerText = err.message;
+        document.getElementById('author').innerText = '';
+      }
+    });
+  </script>
+</body>
+</html>
